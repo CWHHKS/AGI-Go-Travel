@@ -1,0 +1,78 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  PERSONAL
+  GUIDE
+}
+
+model User {
+  id        String   @id @default(uuid()) // Maps to Supabase auth.users.id
+  email     String   @unique
+  role      Role     @default(PERSONAL)
+  name      String?
+  trips     Trip[]   @relation("UserTrips")
+  createdAt DateTime @default(now())
+}
+
+model Trip {
+  id             String   @id @default(uuid())
+  title          String
+  destination    String
+  startDate      DateTime
+  
+  ownerId        String
+  owner          User     @relation("UserTrips", fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  days           Day[]    @relation("TripDays")
+  
+  shareToken     String?  @unique // For public sharing
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([ownerId])
+  @@index([shareToken])
+}
+
+model Day {
+  id             String   @id @default(uuid())
+  tripId         String
+  trip           Trip     @relation("TripDays", fields: [tripId], references: [id], onDelete: Cascade)
+  
+  dayNumber      Int      // 1, 2, 3...
+  startTime      String?  // HH:mm format
+  travelMode     String?  // Default mode for the day
+  
+  places         Place[]  @relation("DayPlaces")
+
+  @@index([tripId])
+}
+
+model Place {
+  id               String   @id @default(uuid())
+  dayId            String
+  day              Day      @relation("DayPlaces", fields: [dayId], references: [id], onDelete: Cascade)
+  
+  name             String
+  googlePlaceId    String?
+  lat              Float
+  lng              Float
+  
+  orderIndex       Int      // For drag & drop ordering
+  durationMins     Int      @default(60) 
+  scheduledTime    String?  // HH:mm 
+  
+  travelTimeToNext Int?     // In minutes (AI predicted)
+  travelModeToNext String?  // mode name (AI predicted)
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([dayId])
+}

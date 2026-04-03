@@ -1,0 +1,52 @@
+# Dependency directories
+node_modules/
+dist/
+build/
+.next/
+.serverless/
+.vercel
+
+# Environment variables (CRITICAL)
+.env
+.env.*
+backend/.env
+frontend/.env
+*.env
+
+# Logs
+*-debug.log*
+*-error.log*
+
+# IDE / Editor
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.sln
+*.sw?
+
+# Security / Credentials
+Google Auth/
+*.json
+!package.json
+!package-lock.json
+
+# Root Scripts / Debugging
+debug_*.js
+test_*.js
+*.js
+!frontend/**/*.js
+!backend/**/*.js
+!package.json
+!package-lock.json
+!backend/api/index.js
+
+# Artifacts / Temp
+.gemini/
+/tmp/
+*.webp
+*.mp4
+*.docx
+*.pdf
+*.png
+prd_text.md
