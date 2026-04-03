@@ -296,7 +296,7 @@ export default function Map() {
                 if (!dest || !p.lat || !p.lng || !dest.lat || !dest.lng) return null;
                 const res = legDirections[p.id];
                 const dayColor = getDayColor(d.day);
-                const mode = p.travelModeToNext || customLegModes[p.id] || (dayTravelModes[d.day] || travelMode);
+                // const mode = p.travelModeToNext || customLegModes[p.id] || (dayTravelModes[d.day] || travelMode);
                 // const isAllDay = currentDay === 0;
                 
                 // Show only current day unless all-day mode
